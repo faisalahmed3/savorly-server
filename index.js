@@ -163,28 +163,6 @@ async function run() {
       }
     });
 
-    // Delete a recipe (only by owner)
-    app.delete('/recipes/:id', async (req, res) => {
-      const recipeId = req.params.id;
-      const userEmail = req.query.email;
-
-      try {
-        const recipe = await recipesCollection.findOne({ _id: new ObjectId(recipeId) });
-        if (!recipe) {
-          return res.status(404).json({ success: false, message: 'Recipe not found' });
-        }
-
-        if (recipe.userEmail !== userEmail) {
-          return res.status(403).json({ success: false, message: 'Unauthorized to delete this recipe' });
-        }
-
-        const result = await recipesCollection.deleteOne({ _id: new ObjectId(recipeId) });
-        res.json({ success: true, message: 'Recipe deleted successfully' });
-      } catch (err) {
-        res.status(500).json({ success: false, message: 'Failed to delete recipe', error: err.message });
-      }
-    });
-
   } finally {
     
   }
